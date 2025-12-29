@@ -1,0 +1,806 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:version='2' class='v2' expr:dir='data:blog.languageDirection' xmlns='http://www.w3.org/1999/xhtml'
+    xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data'
+    xmlns:expr='http://www.google.com/2005/gml/expr'>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>F.F.C - Fast Food Corner</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&amp;family=Roboto:wght@400;500&amp;display=swap"
+        rel="stylesheet" />
+    <b:skin>
+        <![CDATA[
+
+    ]]>
+    </b:skin>
+    <style>
+        :root {
+            --primary-red: #D32F2F;
+            /* Deep Red from the board */
+            --accent-yellow: #FFEB3B;
+            /* Bright Yellow text */
+            --dark-bg: #1a1a1a;
+            --light-bg: #f5f5f5;
+            --text-color: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-bg);
+            padding-bottom: 80px;
+            /* Space for fixed cart */
+        }
+
+        /* --- Header Section --- */
+        header {
+            background-color: var(--primary-red);
+            color: var(--accent-yellow);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 0px #000;
+            margin: 0;
+        }
+
+        p.subtitle {
+            color: white;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            opacity: 0.9;
+        }
+
+        /* --- Order Type Switcher --- */
+        .order-type-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .switch-toggle {
+            display: flex;
+            background: #ddd;
+            border-radius: 30px;
+            padding: 5px;
+            position: relative;
+            cursor: pointer;
+            width: 200px;
+            height: 50px;
+        }
+
+        .switch-btn {
+            flex: 1;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            z-index: 2;
+            transition: color 0.3s;
+        }
+
+        .switch-bg {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 50%;
+            height: 40px;
+            background: var(--primary-red);
+            border-radius: 25px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1;
+        }
+
+        .active-text {
+            color: var(--accent-yellow);
+        }
+
+        .inactive-text {
+            color: #555;
+        }
+
+        /* --- Menu Grid --- */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        .category-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary-red);
+            border-bottom: 3px solid var(--accent-yellow);
+            display: inline-block;
+            margin: 20px 0 10px 0;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            opacity: 0;
+            /* For animation */
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(211, 47, 47, 0.2);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-red), #b71c1c);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .item-name {
+            font-weight: bold;
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+
+        .item-price {
+            color: var(--primary-red);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .add-btn {
+            background-color: var(--primary-red);
+            color: white;
+            border: none;
+            padding: 8px;
+            width: 100%;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .add-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* --- Floating Cart --- */
+        .cart-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #222;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 200;
+            transform: translateY(100%);
+            /* Hidden by default */
+            transition: transform 0.3s ease-out;
+        }
+
+        .cart-bar.visible {
+            transform: translateY(0);
+        }
+
+        .cart-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-yellow);
+        }
+
+        .cart-count {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .checkout-btn {
+            background-color: var(--accent-yellow);
+            color: var(--primary-red);
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Modal for Cart Details */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 300;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .cart-item-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        .qty-controls button {
+            background: #eee;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* --- NEW: Sticky Category Nav --- */
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            /* Adjust based on header height if needed, but header is also sticky. 
+               Since header is sticky, we need this to stick BELOW it. 
+               Header height is roughly 100px+ depending on content. */
+            top: 70px;
+            /* Let's double check header height or just make it sticky below header context 
+               Actually, sticky elements stack if they are siblings. Header is sticky. 
+               We should probably put this nav INSIDE header or right after. 
+               Let's try z-index stacking. */
+            z-index: 99;
+            background: var(--light-bg);
+            padding: 10px 0;
+            overflow-x: auto;
+            white-space: nowrap;
+            display: flex;
+            gap: 10px;
+            padding-left: 10px;
+            padding-right: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            scrollbar-width: none;
+            /* Hide scrollbar Firefox */
+        }
+
+        .sticky-nav::-webkit-scrollbar {
+            display: none;
+            /* Hide scrollbar Chrome/Safari */
+        }
+
+        /* Adjust Header to be compatible */
+        header {
+            position: relative;
+            /* Changed from sticky to relative so we can group sticky logic or keep it sticky?
+            If user wants standard "App" feel, header stays, nav stays below.
+            Let's keep Header sticky, but we need to know its height. 
+            For simplicity in a single file without calc(), let's make the Nav sticky and let the header scroll away OR stick both.
+            Let's make Header relative (scrolls away) and Nav Sticky (stays). 
+            That is a very common mobile pattern (e.g. Instagram profile). */
+            position: relative;
+            z-index: 100;
+        }
+
+        .nav-pill {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-pill.active {
+            background: var(--primary-red);
+            color: white;
+            border-color: var(--primary-red);
+            box-shadow: 0 2px 8px rgba(211, 47, 47, 0.4);
+        }
+
+        /* --- NEW: Toast Notification --- */
+        .toast-container {
+            position: fixed;
+            bottom: 90px;
+            /* Above cart bar */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 300;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInOut 3s forwards;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            10% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            90% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>F.F.C</h1>
+        <p class="subtitle">Crispy Chicken &amp; Burgers</p>
+    </header>
+
+    <div class="hero">
+        <h2>Taste the Crunch! 🍗</h2>
+        <p>Freshly Fried. Served Hot.</p>
+    </div>
+
+    <div class="order-type-container">
+        <div class="switch-toggle" onclick="toggleOrderType()">
+            <div class="switch-bg" id="switchBg"></div>
+            <div class="switch-btn active-text" id="btnPickup">PICKUP</div>
+            <div class="switch-btn inactive-text" id="btnDelivery">DELIVERY</div>
+        </div>
+    </div>
+    <p id="deliveryNote"
+        style="text-align: center; color: var(--primary-red); font-size: 0.9rem; margin-top: -15px; margin-bottom: 20px; display: none; font-weight: bold;">
+        Delivery Charge: ₹20 added to total
+    </p>
+
+    <div id="deliveryAreaContainer" style="display:none; text-align:center; margin-bottom:20px; margin-top: -10px;">
+        <select id="deliveryAreaSelect"
+            style="padding:8px; border-radius:20px; border:1px solid #ccc; width:200px; text-align:center; font-family: 'Roboto', sans-serif;">
+            <option value="" selected="selected" disabled="disabled">Select Delivery Area</option>
+            <option value="Kankinara">Kankinara</option>
+        </select>
+    </div>
+
+    <!-- Sticky Nav -->
+    <div id="categoryNav" class="sticky-nav">
+        <!-- Pills injected by JS -->
+    </div>
+
+    <div class="container" id="menuContainer">
+    </div>
+
+    <div class="cart-bar" id="cartBar">
+        <div class="cart-info">
+            <span class="cart-total" id="barTotal">Total: ₹0</span>
+            <span class="cart-count" id="barCount">0 items</span>
+        </div>
+        <button class="checkout-btn" onclick="openCartModal()">View Order</button>
+    </div>
+
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <h2 style="color:var(--primary-red); margin-bottom:15px;">Your Order</h2>
+            <div id="cartItemsList"></div>
+            <hr style="margin:10px 0;" />
+            <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:1.2rem;">
+                <span>Total:</span>
+                <span id="modalTotal">₹0</span>
+            </div>
+            <div style="margin-top:20px; display:flex; gap:10px;">
+                <button onclick="closeCartModal()"
+                    style="flex:1; padding:10px; background:#ccc; border:none; border-radius:5px; cursor:pointer;">Close</button>
+                <button onclick="finalizeOrder()"
+                    style="flex:2; padding:10px; background:#25D366; color:white; border:none; border-radius:5px; cursor:pointer; font-weight:bold;">WhatsApp
+                    Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script>
+        //<![CDATA[
+        // --- DATA: The Menu Items ---
+        // IMPORTANT: Blogger cannot access files on your computer (assets/...).
+        // 1. Create a new Post in Blogger and upload your images there.
+        // 2. Right-click each uploaded image and select "Copy Image Address".
+        // 3. Paste the URL inside the quotes below, replacing "assets/..."
+        const menuData = [
+            {
+                category: "🍿 Chicken Popcorn", items: [
+                    { name: "Popcorn (Large)", price: 100, image: "assets/ffc_bucket.png" },
+                    { name: "Popcorn (Medium)", price: 50, image: "assets/ffc_bucket.png" },
+                    { name: "Popcorn (10 Pc)", price: 30, image: "assets/ffc_bucket.png" }
+                ]
+            },
+            {
+                category: "🍗 Crispy Chicken", items: [
+                    { name: "Crispy Leg (1 Pc)", price: 50, image: "https://placehold.co/400x300/D32F2F/FFEB3B?text=F.F.C+%0ACrispy+Leg" },
+                    { name: "Crispy Leg (3 Pc)", price: 140, image: "https://placehold.co/400x300/D32F2F/FFEB3B?text=F.F.C+%0ACrispy+Legs" },
+                    { name: "Crispy Wings (1 Pc)", price: 35, image: "https://placehold.co/400x300/D32F2F/FFEB3B?text=F.F.C+%0AWings" },
+                    { name: "Crispy Wings (3 Pc)", price: 100, image: "https://placehold.co/400x300/D32F2F/FFEB3B?text=F.F.C+%0AWings" },
+                    { name: "Crispy Pakoda (1 Pc)", price: 20, image: "https://placehold.co/400x300/D32F2F/FFEB3B?text=F.F.C+%0APakoda" },
+                    { name: "Crispy Pakoda (4 Pc)", price: 70, image: "https://placehold.co/400x300/D32F2F/FFEB3B?text=F.F.C+%0APakoda" }
+                ]
+            },
+            {
+                category: "🍔 Burgers", items: [
+                    { name: "Chicken Burger", price: 50, image: "assets/ffc_burger.png" },
+                    { name: "Chicken Burger w/ Cheese", price: 60, image: "assets/ffc_burger.png" },
+                    { name: "Chicken Burger Dbl Patty", price: 75, image: "assets/ffc_burger.png" },
+                    { name: "Veg Burger", price: 40, image: "assets/ffc_burger.png" }
+                ]
+            },
+            {
+                category: "🥪 Sandwiches", items: [
+                    { name: "Chicken Sandwich", price: 45, image: "https://placehold.co/400x300/D32F2F/FFEB3B?text=F.F.C+%0ASandwich" },
+                    { name: "Chicken Sandwich with Cheese", price: 55, image: "https://placehold.co/400x300/D32F2F/FFEB3B?text=F.F.C+%0ACheese+Sandwich" },
+                    { name: "Veg Sandwich", price: 35, image: "https://placehold.co/400x300/D32F2F/FFEB3B?text=F.F.C+%0AVeg+Sandwich" },
+                    { name: "Veg Sandwich with Cheese", price: 45, image: "https://placehold.co/400x300/D32F2F/FFEB3B?text=F.F.C+%0AVeg+Cheese" }
+                ]
+            },
+            {
+                category: "🍟 Sides", items: [
+                    { name: "French Fries Full", price: 60, image: "assets/ffc_fries.png" },
+                    { name: "French Fries Half", price: 40, image: "assets/ffc_fries.png" }
+                ]
+            }
+        ];
+
+        // --- STATE ---
+        let cart = {}; // Object to store items: { "Item Name": { price: 100, qty: 1 } }
+        let orderType = "Pickup"; // Default
+
+        // --- RENDER MENU ---
+        const container = document.getElementById('menuContainer');
+        const navContainer = document.getElementById('categoryNav');
+
+        // Render Nav Pills
+        menuData.forEach((cat, index) => {
+            const pill = document.createElement('a');
+            pill.className = `nav-pill ${index === 0 ? 'active' : ''}`;
+            pill.innerText = cat.category.split(' ')[1] || cat.category; // Simple name
+            pill.href = `#cat-${index}`;
+            pill.onclick = (e) => {
+                e.preventDefault();
+                // Set active
+                document.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                // Scroll
+                const element = document.getElementById(`cat-${index}`);
+                const navHeight = 60; // Approx nav height
+                const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+                const offsetPosition = elementPosition - navHeight - 10;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+            };
+            navContainer.appendChild(pill);
+        });
+
+        menuData.forEach((cat, index) => {
+            const catDiv = document.createElement('div');
+            catDiv.id = `cat-${index}`; // ID for scrolling
+            catDiv.innerHTML = `<h3 class="category-title">${cat.category}</h3>`;
+
+            const grid = document.createElement('div');
+            grid.className = 'menu-grid';
+
+            cat.items.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'menu-card';
+                card.style.animationDelay = `${index * 0.1}s`; // Stagger effect
+                card.innerHTML = `
+                <img src="${item.image}" alt="${item.name}" style="width:100%; border-radius:8px; margin-bottom:10px; height:150px; object-fit:cover;">
+                <div>
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-price">₹${item.price}</div>
+                </div>
+                <button class="add-btn" onclick="addToCart('${item.name}', ${item.price})">ADD +</button>
+            `;
+                grid.appendChild(card);
+            });
+
+            catDiv.appendChild(grid);
+            container.appendChild(catDiv);
+        });
+
+
+        // --- LOGIC ---
+
+        function toggleOrderType() {
+            const bg = document.getElementById('switchBg');
+            const pBtn = document.getElementById('btnPickup');
+            const dBtn = document.getElementById('btnDelivery');
+            const note = document.getElementById('deliveryNote');
+            const areaContainer = document.getElementById('deliveryAreaContainer');
+
+            if (orderType === "Pickup") {
+                orderType = "Delivery";
+                bg.style.transform = "translateX(100%)";
+                pBtn.classList.replace('active-text', 'inactive-text');
+                dBtn.classList.replace('inactive-text', 'active-text');
+                note.style.display = 'block';
+                areaContainer.style.display = 'block';
+            } else {
+                orderType = "Pickup";
+                bg.style.transform = "translateX(0)";
+                dBtn.classList.replace('active-text', 'inactive-text');
+                pBtn.classList.replace('inactive-text', 'active-text');
+                note.style.display = 'none';
+                areaContainer.style.display = 'none';
+            }
+            updateCartUI();
+        }
+
+        function addToCart(name, price) {
+            if (cart[name]) {
+                cart[name].qty++;
+            } else {
+                cart[name] = { price: price, qty: 1 };
+            }
+            updateCartUI();
+            showToast(`Added ${name} 🛒`);
+        }
+
+        function removeFromCart(name) {
+            if (cart[name]) {
+                cart[name].qty--;
+                if (cart[name].qty <= 0) {
+                    delete cart[name];
+                }
+            }
+            updateCartUI();
+            renderCartModalItems(); // Re-render modal if open
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = message;
+            container.appendChild(toast);
+
+            // Remove after animation (3s)
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        function updateCartUI() {
+            let total = Object.values(cart).reduce((acc, item) => acc + (item.price * item.qty), 0);
+            const count = Object.values(cart).reduce((acc, item) => acc + item.qty, 0);
+
+            if (orderType === "Delivery" && count > 0) {
+                total += 20;
+            }
+
+            document.getElementById('barTotal').innerText = `Total: ₹${total}`;
+            document.getElementById('modalTotal').innerText = `₹${total}`;
+            document.getElementById('barCount').innerText = `${count} items`;
+
+            const cartBar = document.getElementById('cartBar');
+            if (count > 0) {
+                cartBar.classList.add('visible');
+            } else {
+                cartBar.classList.remove('visible');
+                closeCartModal();
+            }
+        }
+
+        function openCartModal() {
+            renderCartModalItems();
+            document.getElementById('cartModal').style.display = 'flex';
+        }
+
+        function closeCartModal() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+
+        function renderCartModalItems() {
+            const list = document.getElementById('cartItemsList');
+            list.innerHTML = '';
+
+            Object.keys(cart).forEach(name => {
+                const item = cart[name];
+                list.innerHTML += `
+                <div class="cart-item-row">
+                    <div>
+                        <div style="font-weight:bold;">${name}</div>
+                        <div style="font-size:0.8rem; color:#666;">₹${item.price} x ${item.qty}</div>
+                    </div>
+                    <div class="qty-controls">
+                        <button onclick="removeFromCart('${name}')">-</button>
+                        <span style="margin:0 10px;">${item.qty}</span>
+                        <button onclick="addToCart('${name}', ${item.price})">+</button>
+                    </div>
+                </div>
+            `;
+            });
+
+            if (orderType === "Delivery" && Object.keys(cart).length > 0) {
+                list.innerHTML += `
+                <div class="cart-item-row" style="border-bottom:none; align-items:center;">
+                    <div style="font-weight:bold; color:var(--primary-red);">Delivery Charge</div>
+                    <div style="font-weight:bold;">₹20</div>
+                </div>
+                `;
+            }
+        }
+
+        function finalizeOrder() {
+            if (orderType === "Delivery") {
+                const area = document.getElementById('deliveryAreaSelect').value;
+                if (!area) {
+                    alert("Please select a delivery area.");
+                    return;
+                }
+
+                // Show loading state or toast
+                showToast("Acquiring Location... 📍");
+
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const lat = position.coords.latitude;
+                            const lon = position.coords.longitude;
+                            const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                            sendToWhatsapp(mapLink);
+                        },
+                        (error) => {
+                            alert("Location access denied or failed. Sending order without precise location.");
+                            sendToWhatsapp(null);
+                        }
+                    );
+                } else {
+                    alert("Geolocation is not supported by this browser.");
+                    sendToWhatsapp(null);
+                }
+            } else {
+                // Pickup
+                sendToWhatsapp(null);
+            }
+        }
+
+        function sendToWhatsapp(locationUrl) {
+            // Create WhatsApp Message
+            let message = `*New Order - F.F.C* 🍟\n`;
+            message += `Type: *${orderType}*\n\n`;
+
+            let total = 0;
+            Object.keys(cart).forEach(name => {
+                const item = cart[name];
+                const itemTotal = item.price * item.qty;
+                message += `${item.qty} x ${name} = ₹${itemTotal}\n`;
+                total += itemTotal;
+            });
+
+            if (orderType === "Delivery") {
+                const area = document.getElementById('deliveryAreaSelect').value;
+                message += `Delivery Area: ${area}\n`;
+                message += `Delivery Charge: ₹20\n`;
+                total += 20;
+
+                if (locationUrl) {
+                    message += `\n📍 *Location*: ${locationUrl}\n`;
+                }
+            }
+
+            message += `\n*TOTAL: ₹${total}*`;
+
+            // Encode and open WhatsApp
+            const encodedMsg = encodeURIComponent(message);
+            // Replace 919999999999 with the actual shop phone number
+            window.open(`https://wa.me/918961857550?text=${encodedMsg}`, '_blank');
+        }
+        //]]>
+    </script>
+
+    <b:section class='main' id='fix_main_section' showaddelement='yes' />
+</body>
+
+</html>
